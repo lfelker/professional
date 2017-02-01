@@ -69,7 +69,7 @@
       map.fitBounds([[-86.897640, 36.090449], [-86.689192, 36.213608]]);
 
       map.on('load', function() {
-        var legend_layers = ["Bike Lane", "Bike Lane on Busy Road", "Shared Road", "Shared Busy Road"];
+        var legend_layers = ["Bike Lane", "Bike Lane On Busy Road", "Shared Road", "Shared Busy Road"];
 
         console.log(map.getStyle());
 
@@ -88,7 +88,7 @@
             value.innerHTML = layer;
           }
 
-          if (layer == "Bike Lane on Busy Road" || layer == "Shared Busy Road") {
+          if (layer == "Bike Lane On Busy Road" || layer == "Shared Busy Road") {
             var dash1 = document.createElement('span');
             var dash2 = document.createElement('span');;
             dash1.className = 'dash';
@@ -102,7 +102,7 @@
         });
       });
 
-      var info_layers = ["Bike Lane", "Protected Bike Lane", "Greenway", "Bike Lane on Busy Road", "Shared Road", "Shared Busy Road"];
+      var info_layers = ["Bike Lane", "Protected Bike Lane", "Greenway", "Bike Lane On Busy Road", "Shared Road", "Shared Busy Road"];
 
       map.on('mousemove', function(e) {
 
