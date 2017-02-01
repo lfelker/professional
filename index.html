@@ -40,6 +40,11 @@
       <div class="row">
         <div class="col-sm-12 col-md-12">
           <div id="map"></div>
+          <div class='map-overlay' id='features'>
+            <div id='pd'>
+            </div>
+          </div>
+          <div class='map-overlay' id='legend'></div>
         </div>
       </div>
     </div>
@@ -62,6 +67,55 @@
       });
 
       map.fitBounds([[-86.897640, 36.090449], [-86.689192, 36.213608]]);
+
+      map.on('load', function() {
+        var legend_layers = ["Bike Lane", "Bike Lane on Busy Road", "Shared Road", "Shared Busy Road"];
+
+        console.log(map.getStyle());
+
+        legend_layers.forEach(function(layer) {
+          var color = map.getPaintProperty(layer, 'line-color');
+          var item = document.createElement('div');
+          var key = document.createElement('span');
+
+          key.className = 'legend-key';
+          key.style.backgroundColor = color;
+          var value = document.createElement('span');
+
+          if (layer == "Bike Lane") {
+            value.innerHTML = layer + " Or Greenway";
+          } else {
+            value.innerHTML = layer;
+          }
+
+          if (layer == "Bike Lane on Busy Road" || layer == "Shared Busy Road") {
+            var dash1 = document.createElement('span');
+            var dash2 = document.createElement('span');;
+            dash1.className = 'dash';
+            dash2.className = 'dash';
+            key.appendChild(dash1);
+            key.appendChild(dash2);
+          }
+          item.appendChild(key);
+          item.appendChild(value);
+          legend.appendChild(item);
+        });
+      });
+
+      var info_layers = ["Bike Lane", "Protected Bike Lane", "Greenway", "Bike Lane on Busy Road", "Shared Road", "Shared Busy Road"];
+
+      map.on('mousemove', function(e) {
+
+        var features = map.queryRenderedFeatures(e.point, {
+          layers: info_layers
+        });
+
+        if (features.length > 0) {
+          document.getElementById('pd').innerHTML = '<p>' + features[0].layer.id + '</p>';
+        } else {
+          document.getElementById('pd').innerHTML = '';
+        }
+      });
     </script>
   </div>
 
