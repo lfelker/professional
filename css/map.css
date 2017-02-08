@@ -67,18 +67,6 @@
     max-width: 200px;
 }
 
-#routing-button {
-  background: url(../img/road-with-two-placeholders.png);
-  background-color: rgba(255, 255, 255, 1);
-  background-size: 90%;
-  background-position: 2px;
-  background-repeat: no-repeat;
-  right: 0;
-  top: 0;
-  margin-right: 25px;
-  margin-top: 55px;
-}
-
 .map-button {
   border-radius: 3px;
   position: absolute;

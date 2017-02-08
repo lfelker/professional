@@ -7483,7 +7483,8 @@ var style = [{
   'paint': {
     'line-color': '#bbb',
     'line-width': 4,
-    'line-dasharray': [1, 2]
+    'line-dasharray': [0,0],
+    'line-opacity': 0
   },
   'filter': ['all', ['in', '$type', 'LineString'], ['in', 'route', 'alternate']]
 }, {
@@ -7491,13 +7492,14 @@ var style = [{
   'type': 'line',
   'source': 'directions',
   'layout': {
-    'line-cap': 'round',
+    'line-cap': 'square',
     'line-join': 'round'
   },
   'paint': {
     'line-color': '#3bb2d0',
-    'line-width': 4,
-    'line-dasharray': [1, 2]
+    'line-width': 3,
+    'line-offset': 4,
+    'line-opacity': 1
   },
   'filter': ['all', ['in', '$type', 'LineString'], ['in', 'route', 'selected']]
 }, {
