@@ -9,8 +9,12 @@
   <link rel="stylesheet" type="text/css" href="css/tab.css">
   <link rel="stylesheet" type="text/css" href="css/map.css">
   <link rel="stylesheet" type="text/css" href="css/about.css">
+  <link rel='stylesheet' src='css/mapbox-directions.css' type='text/css'/>
+  <link rel='stylesheet' href='css/mapbox-geocoder.css' type='text/css' />
   <script src="js/tabTransition.js"></script>
   <script src="js/mapContent.js"></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.js'></script>
+  <script src='js/directions.js'></script>
 </head>
 
 <body>
@@ -45,16 +49,30 @@
             </div>
           </div>
           <div class='map-overlay' id='legend'></div>
+          <div class='map-overlay' id='route'>
+            
+          </div>
+          <button onclick='loadRouting()' id='routing-button' type='button' class='map-button'>
+            <div id='routing-button-div' class='map-button-div'></div>
+          </button>
+        </div>
+        <div class='col-sm-12 col-md-12'>
+          <div id='imprint'>
+            Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+          </div>
         </div>
       </div>
     </div>
 
-    <script> 
+    <script>
       $(function(){
         $("#mapContent").load("html/mapContent.html"); 
       });
 
-      var bounds = [[-86.897640, 36.090449], [-86.689192, 36.213608]];
+      var blLatLong = [-86.897640, 36.090449];
+      var trLatLong = [-86.684192, 36.233608];
+      var bounds = [blLatLong, trLatLong];
+      var boundsArray = [blLatLong[0], blLatLong[1], trLatLong[0], trLatLong[1]];
 
       mapboxgl.accessToken = 'pk.eyJ1IjoibGFuZWZlbGtlciIsImEiOiJjaXltMHlid3owMDAwMndwZ25oZ3E2ZndvIn0.oq1pkRiMAbhvGPPzD3nq2A';
       var map = new mapboxgl.Map({
@@ -66,12 +84,67 @@
           maxBounds: bounds
       });
 
+      var geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        bbox: boundsArray
+      });
+
+      var directions = new MapboxDirections({
+        accessToken: mapboxgl.accessToken,
+        geocoder: {bbox: boundsArray},
+        profile: 'cycling'
+      });
+
+      map.addControl(geocoder);
+
       map.fitBounds([[-86.897640, 36.090449], [-86.689192, 36.213608]]);
 
-      map.on('load', function() {
-        var legend_layers = ["Bike Lane", "Bike Lane On Busy Road", "Shared Road", "Shared Busy Road"];
+      function loadRouting() {
+        document.getElementById('routing-button').style.display = 'none';
+        map.removeControl(geocoder);
+        map.addControl(directions, 'top-right');
+        document.getElementById('mapbox-directions-profile-cycling').checked = true;
+        // document.getElementById('mapbox-directions-profile-cycling').parentNode.style.display = 'none';
+        document.getElementsByClassName('directions-icon-reverse')[0].style.display = 'none';
+        document.getElementsByClassName('directions-control-instructions')[0].style.display = 'none';
+      }
 
-        console.log(map.getStyle());
+      map.on('load', function() {
+
+        // Listen for the `geocoder.input` event that is triggered when a user
+        // makes a selection and add a symbol that matches the result.
+        geocoder.on('result', function(ev) {
+
+          // ensure only one search marker at a time
+          var element = document.getElementById('search-marker');
+          if (element != null) {
+            element.parentNode.removeChild(element);
+          }
+
+          // create DOM element for the marker
+          var el = document.createElement('div');
+          el.id = 'search-marker';
+
+          var popup = new mapboxgl.Popup({offset: 7.5});
+          popup.setText(ev.result.place_name);
+
+          // create the marker
+          new mapboxgl.Marker(el, {offset:[-5, -5]})
+            .setLngLat(ev.result.geometry.coordinates)
+            .setPopup(popup) // sets a popup on this marker
+            .addTo(map);
+
+          map.flyTo({
+            center: ev.result.geometry.coordinates,
+            zoom: 13
+          });
+        });
+
+        directions.on('result', function(ev) {
+          console.log(ev);
+        });
+
+        var legend_layers = ["Bike Lane", "Bike Lane On Busy Road", "Shared Road", "Shared Busy Road"];
 
         legend_layers.forEach(function(layer) {
           var color = map.getPaintProperty(layer, 'line-color');
