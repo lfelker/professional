@@ -1,149 +1,61 @@
 <html>
 <head>
   <title>Lane Felker</title>
-  <script src='https://api.mapbox.com/mapbox-gl-js/v0.32.1/mapbox-gl.js'></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <link href='https://api.mapbox.com/mapbox-gl-js/v0.32.1/mapbox-gl.css' rel='stylesheet' />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="css/tab.css">
-  <link rel="stylesheet" type="text/css" href="css/map.css">
-  <link rel="stylesheet" type="text/css" href="css/about.css">
-  <link rel='stylesheet' src='css/mapbox-directions.css' type='text/css'/>
-  <link rel='stylesheet' href='css/mapbox-geocoder.css' type='text/css' />
-  <script src="js/tabTransition.js"></script>
-  <script src="js/mapContent.js"></script>
-  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.js'></script>
-  <script src='js/directions.js'></script>
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-
-  <ul class="tab">
-    <li><a href="javascript:void(0)" class="tablinks" onclick="loadContent(event, 'About')" id="defaultOpen">About</a></li>
-    <li><a href="javascript:void(0)" class="tablinks" onclick="loadContent(event, 'Nashville_Interactive')">Bike Nashville Interactive</a></li>
-    <li><a href="javascript:void(0)" class="tablinks" onclick="loadContent(event, 'Nashville_Static')">Bike Nashville Static</a></li>
-  </ul>
-
-  <div id="About" class="tabcontent">
-    <div id="aboutContent"></div>
-    <script> 
-      $(function(){
-        $("#aboutContent").load("html/about.html"); 
-      });
-    </script>
-  </div>
-
-  <div id="Nashville_Interactive" class="tabcontent">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-12 col-md-12">
-          <div id="mapContent"></div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-12">
-          <div id="map"></div>
-          <div class='map-overlay' id='features'>
-            <div id='pd'>
-            </div>
-          </div>
-          <div class='map-overlay' id='legend'></div>
-        </div>
+  <div id="content" class="middle">
+    <div id="img_container" class="middle">
+      <img id="appalachian" alt="Appalachian Trail Summit Photo" src="img/appalachian.jpg">
+      <div id="photo_text">
+        <h1>Lane Felker</h1>
+        <h4>Software Developer • Map Maker</h4>
       </div>
     </div>
-
-    <script>
-      $(function(){
-        $("#mapContent").load("html/mapContent.html"); 
-      });
-
-      var blLatLong = [-86.899383, 36.073240];
-      var trLatLong = [-86.684192, 36.233608];
-      var bounds = [blLatLong, trLatLong];
-      var boundsArray = [blLatLong[0], blLatLong[1], trLatLong[0], trLatLong[1]];
-
-      mapboxgl.accessToken = 'pk.eyJ1IjoibGFuZWZlbGtlciIsImEiOiJjaXltMHlid3owMDAwMndwZ25oZ3E2ZndvIn0.oq1pkRiMAbhvGPPzD3nq2A';
-      var map = new mapboxgl.Map({
-          container: 'map',
-          maxZoom: 18,
-          style: 'mapbox://styles/lanefelker/ciyjbdp1400212ro9lkyl5f60',
-          zoom: 12,
-          center: [-86.79, 36.13],
-          maxBounds: bounds
-      });
-
-      var directions = new MapboxDirections({
-        accessToken: mapboxgl.accessToken,
-        geocoder: {bbox: boundsArray},
-        profile: 'cycling'
-      });
-
-      map.fitBounds([[-86.897640, 36.090449], [-86.689192, 36.213608]]);
-
-      map.addControl(directions, 'top-right');
-      document.getElementById('mapbox-directions-profile-cycling').checked = true;
-      document.getElementsByClassName('directions-icon-reverse')[0].style.display = 'none';
-      document.getElementsByClassName('directions-control-instructions')[0].style.display = 'none';
-    
-
-      map.on('load', function() {
-
-        var legend_layers = ["Bike Lane", "Bike Lane On Busy Road", "Shared Road", "Shared Busy Road"];
-
-        legend_layers.forEach(function(layer) {
-          var color = map.getPaintProperty(layer, 'line-color');
-          var item = document.createElement('div');
-          var key = document.createElement('span');
-
-          key.className = 'legend-key';
-          key.style.backgroundColor = color;
-          var value = document.createElement('span');
-
-          if (layer == "Bike Lane") {
-            value.innerHTML = layer + " Or Greenway";
-          } else {
-            value.innerHTML = layer;
-          }
-
-          if (layer == "Bike Lane On Busy Road" || layer == "Shared Busy Road") {
-            var dash1 = document.createElement('span');
-            var dash2 = document.createElement('span');;
-            dash1.className = 'dash';
-            dash2.className = 'dash';
-            key.appendChild(dash1);
-            key.appendChild(dash2);
-          }
-          item.appendChild(key);
-          item.appendChild(value);
-          legend.appendChild(item);
-        });
-      });
-
-      var info_layers = ["Bike Lane", "Protected Bike Lane", "Greenway", "Bike Lane On Busy Road", "Shared Road", "Shared Busy Road"];
-
-      map.on('mousemove', function(e) {
-
-        var features = map.queryRenderedFeatures(e.point, {
-          layers: info_layers
-        });
-
-        if (features.length > 0) {
-          document.getElementById('pd').innerHTML = '<p>' + features[0].layer.id + '</p>';
-        } else {
-          document.getElementById('pd').innerHTML = '';
-        }
-      });
-    </script>
+    <div id="about" class="middle text margin">
+      <p>
+        I am broadly interested in maps, data visualization, software development, accessibility, and ecology. I recently received my Bachelor's from the University of Washington Computer Science program. My experience during that time includes studying the ecological impacts of climate change as a field crew leader and researcher in the <a href="https://faculty.washington.edu/jhrl/Index.html"  target="_blank">HRL Lab</a> and working as a software developer for <a href="https://www.accessmapseattle.com/"  target="_blank">Access Map</a> where I developed an interactive map for Android devices to help people with limited mobility navigate Seattle.
+      </p>
+      <p>
+        After graduating I traveled for a year, bicycling throughout Southeast Asia and thru-hiking the entire Appalachian Trail, and have recently settled back in Seattle, WA to pursue a career in software development and map making. I am currently employed as a Geospatial Software Engineer for Access Map where I am working to expand the data visualization and routing capabilities of the web and mobile apps to encompass all of King County.
+      </p>
+    </div>
+    <div class="hr_container"><hr></div>
+    <div id="projects" class="middle">
+      <div id="bike_nash" class="text">
+        <div id="bike_img_container">
+          <img id="bike_map" alt="Bike map centered on Nashville TN" src="img/bike_map_wide.png">
+          <div id="bike_nash_title">
+            <h2>Bike Nashville</h2>
+          </div>
+        </div>
+        <p id="bike_map_about">
+         Bike Nashville is an ongoing project that aims to simplify the experience of choosing a safe and effective bike route in Nashville, TN. The map currently distributed by the city of Nashville is out of date, has incomplete routes, is visually hard to understand, and is primarily designed for tourists. Additionally, routing applications, like google maps, often give routes that prioritize speed over safety. With Bike Nashville you can visualize bike infrastructure along a recommended route and visualize potential alternative paths that might be more safe or scenic.
+        </p>
+        <p>
+         This project involved compiling data - from Open Street Map, Nashville's Planning Department, and locals' knowlege of good routes - to build shapefiles in QGIS that are comprehensive and up to date. I initially designed the graphics of the map in QGIS and later translated them to MapBox. You can see the current interactive beta version by clicking on the map image.
+        </p>
+      </div>
+    </div>
+    <div class="hr_container"><hr></div>
+    <div id="contact" class="middle text margin">
+      <p>Please reach out to me if you have any questions about my work or any projects you want to collaborate on!</p>
+      <p id="social">
+        <a href="https://www.linkedin.com/in/lane-felker" class="fa fa-linkedin" target="_blank"></a>
+      </p>
+      <p id="copyright">
+        <a href:"">© Lane Felker 2017</a> 
+      </p>
+    </div>
+    <script language="JavaScript">
+      var username = "lanefelker";
+      var hostname = "gmail.com";
+      var linktext = username + "@" + hostname ;
+      document.getElementById("social").innerHTML += "<a href='" + "mail" + "to:" + username + "@" + hostname + "' class='fa fa-envelope' target='_blank'></a>";
+      </script>
   </div>
-
-  <div id="Nashville_Static" class="tabcontent">
-    <h3>Nashville Static Bike Map </h3>
-    <p>Coming Soon</p>
-  </div>
-
-  <script>
-    document.getElementById("defaultOpen").click();
-  </script>
 </body>
 </html>

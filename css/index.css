@@ -1,0 +1,146 @@
+     
+body {
+	font: 100 1em/1.7em "Helvetica", arial, sans-serif;
+	min-width: 150px;
+	background-color: #333;
+}
+
+#content {
+    height: auto;
+    width: auto\9;
+	display: block;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.middle {
+	max-width: 650px;
+	width: 100%;
+    width: auto\9;
+    margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	overflow: auto;
+}
+
+.hr_container {
+	border-width: 1px;
+    background-color: #fff;
+}
+
+hr {
+	border-width: 1px;
+    margin: 0 20 0 20;
+    border-style: solid;
+    color: #333;
+}
+
+#appalachian {
+	max-width: 650px;
+    width: 100%;
+    width: auto\9;
+}
+
+#photo_text {
+	position: absolute;
+	top: 33%;
+	width: 100%;
+	text-align: center;
+    color: #e1e1e1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 2px;
+}
+
+#about {
+	background-color: #fff;
+}
+
+.text p {
+	text-align: left;
+    font-size: medium;
+    line-height: normal;
+}
+
+.margin p {
+	margin-top:  15px;
+	margin-bottom: 15px;
+	margin-right: 20px;
+	margin-left: 20px;
+}
+
+#projects {
+	background-color: #fff;
+}
+
+#projects h3 {
+	text-align: center;
+}
+
+#bike_nash {
+	margin-top: 15px;
+	margin-left: 20px;
+	margin-right:20px;
+	position: relative;
+}
+
+#bike_img_container {
+	position: relative;
+}
+
+#bike_nash_title {
+	position: absolute;
+	top: 40%;
+	width: 100%;
+	text-align: center;
+    color: #434343;
+}
+
+.text img {
+	width: 100%;
+}
+
+#contact {
+	background-color: #fff;
+	overflow: hidden;
+}
+
+#social {
+	float: left;
+}
+
+/* Style all font awesome icons */
+.fa {
+    padding: 5px;
+    font-size: 30px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+}
+
+/* Add a hover effect if you want */
+.fa:hover {
+    opacity: 0.7;
+}
+
+/* Set a specific color for each brand */
+
+/* Facebook */
+.fa-linkedin {
+    background: #007bb5;
+    color: white;
+}
+
+.fa-envelope {
+	background: #dd4b39;
+	color: white; 
+}
+
+#copyright {
+	font-size: x-small;
+	float: right;
+}
+/* Add a hover effect if you want */
+#copyright:hover {
+    opacity: 0.7;
+}
